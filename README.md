@@ -1,5 +1,16 @@
-# Vue 3 + Vite
+Skypro.Wallet
+Приложение для учета личных расходов с анализом трат.
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+✨ Особенности
+📊 Таблица расходов с категориями
+➕ Модальное окно для добавления новых расходов
+🗑️ Удаление расходов одним кликом
+🔐 Авторизация и регистрация
+📈 Анализ расходов (в разработке)
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+🛠 Технологии
+Vue.js 3
+Vue Router 4
+Pinia
+Vite
+CSS
