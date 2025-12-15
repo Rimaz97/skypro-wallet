@@ -1,54 +1,83 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
+import AppLayout from '@/layouts/AppLayout.vue'
+import AnalysisPage from '@/views/AnalysisPage.vue'
+import ExpensesPage from '@/views/ExpensesPage.vue'
+import SigninPage from '@/views/SigninPage.vue'
+import SignupPage from '@/views/SignupPage.vue'
+import { authStore } from '@/store/auth'
 
-// Прямые импорты для теста
-import MainPage from "../pages/MainPage.vue";
-import LoginPage from "../pages/LoginPage.vue";
-import RegisterPage from "../pages/RegisterPage.vue";
-//import NewSpendPage from "../pages/NewSpendPage.vue";
-import EditSpendPage from "../pages/EditSpendPage.vue";
-import SpendAnalysisPage from "../pages/SpendAnalysisPage.vue";
-import NotFoundPage from "../pages/NotFoundPage.vue";
 
 const routes = [
   {
-    path: "/",
-    name: "Main",
-    component: MainPage,
+    path: '/',
+    component: AppLayout,
+    meta: { requiresAuth: true },
     children: [
-      //{path: "spend/new",name: "NewSpend",component: NewSpendPage,},
       {
-        path: "spend/:id",
-        name: "EditSpend",
-        component: EditSpendPage,
-        props: true,
+        path: '',
+        redirect: '/expenses',
+      },
+      {
+        path: '/analysis',
+        name: 'AnalysisPage',
+        component: AnalysisPage,
+      },
+      {
+        path: '/expenses',
+        name: 'ExpensesPage',
+        component: ExpensesPage,
       },
     ],
   },
   {
-    path: "/spend-analysis",
-    name: "SpendAnalysis",
-    component: SpendAnalysisPage,
+    path: '/signin',
+    name: 'SignIn',
+    component: SigninPage,
+    meta: { guestOnly: true },
   },
-  {
-    path: "/login",
-    name: "Login",
-    component: LoginPage,
+    {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignupPage,
+    meta: { guestOnly: true }
   },
-  {
-    path: "/register",
-    name: "Register",
-    component: RegisterPage,
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: NotFoundPage,
-  },
-];
+]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+})
+
+router.beforeEach(async (to) => {
+  try {
+    await authStore.init();
+
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const guestOnly = to.matched.some(record => record.meta.guestOnly);
+
+    const isAuthenticated = authStore.isAuthenticated();
+
+    if (requiresAuth) {
+      if (!isAuthenticated) {
+        return {
+          path: '/signin',
+          query: { redirect: to.fullPath }
+        };
+      }
+      return true;
+    }
+
+    if (guestOnly && isAuthenticated) {
+      return { path: '/' };
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error('Routing error:', error);
+    authStore.logout();
+    return { path: '/signin' };
+  }
 });
 
-export default router;
+export default router
