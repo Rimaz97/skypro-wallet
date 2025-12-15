@@ -6,7 +6,6 @@ import SigninPage from '@/views/SigninPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import { authStore } from '@/store/auth'
 
-
 const routes = [
   {
     path: '/',
@@ -27,6 +26,24 @@ const routes = [
         name: 'ExpensesPage',
         component: ExpensesPage,
       },
+      {
+        path: '/expenses/new',
+        name: 'NewExpense',
+        component: () => import('@/views/NewExpensePage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/analysis',
+        name: 'Analysis',
+        component: () => import('@/views/AnalysisPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/analysis/select-period',
+        name: 'SelectPeriod',
+        component: () => import('@/views/SelectPeriodPage.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   {
@@ -35,11 +52,11 @@ const routes = [
     component: SigninPage,
     meta: { guestOnly: true },
   },
-    {
+  {
     path: '/signup',
     name: 'SignUp',
     component: SignupPage,
-    meta: { guestOnly: true }
+    meta: { guestOnly: true },
   },
 ]
 
@@ -50,34 +67,33 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   try {
-    await authStore.init();
+    await authStore.init()
 
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-    const guestOnly = to.matched.some(record => record.meta.guestOnly);
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+    const guestOnly = to.matched.some((record) => record.meta.guestOnly)
 
-    const isAuthenticated = authStore.isAuthenticated();
+    const isAuthenticated = authStore.isAuthenticated()
 
     if (requiresAuth) {
       if (!isAuthenticated) {
         return {
           path: '/signin',
-          query: { redirect: to.fullPath }
-        };
+          query: { redirect: to.fullPath },
+        }
       }
-      return true;
+      return true
     }
 
     if (guestOnly && isAuthenticated) {
-      return { path: '/' };
+      return { path: '/' }
     }
 
-    return true;
-
+    return true
   } catch (error) {
-    console.error('Routing error:', error);
-    authStore.logout();
-    return { path: '/signin' };
+    console.error('Routing error:', error)
+    authStore.logout()
+    return { path: '/signin' }
   }
-});
+})
 
 export default router

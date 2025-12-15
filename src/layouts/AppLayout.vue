@@ -53,37 +53,32 @@ onMounted(async () => {
 .content {
   flex: 1;
   padding: 20px;
+}
 
-  @media (max-width: 768px) {
-    padding: 15px;
+/* Медиа-запросы */
+
+/* Планшеты (до 1024px) */
+@media (max-width: 1024px) {
+  .content {
+    padding: 16px;
   }
 }
 
-@media (max-width: 992px) {
-  .layout {
-    background-color: #e0e0e0;
-  }
-}
-
+/* Планшеты маленькие (до 768px) */
 @media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .content {
-    width: 100%;
-    max-width: 600px;
+    padding: 12px;
   }
 }
 
-@media (max-width: 480px) {
-  .layout {
-    padding: 10px;
+/* Мобильные (до 425px) - ДЕЛАЕМ БЕЛЫЙ ФОН ДЛЯ ЕДИНОГО ЦВЕТА */
+@media (max-width: 425px) {
+  .content {
+    padding: 0;
   }
 
-  .content {
-    padding: 10px;
+  .layout {
+    background-color: white; /* Меняем на белый для единства */
   }
 }
 </style>

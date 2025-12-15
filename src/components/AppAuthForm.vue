@@ -156,155 +156,160 @@ const isDisabled = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: #f0f0f0;
+  min-height: 100vh;
+  background: #f8f9fa;
   padding: 20px;
 }
 
 form {
-  width: 380px;
-  border: 1px solid #e0e0e0;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
   background: white;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
 }
 
 form h2 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   font-size: 24px;
-  color: #333333;
+  color: #1a1a1a;
 }
 
-input,
-button {
+input {
   width: 100%;
-  padding: 12px 10px;
-  margin-bottom: 18px;
-  border: 1px solid #ddd;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  font-size: 16px;
+  transition: all 0.2s ease;
   box-sizing: border-box;
-}
-
-input.invalid {
-  border-color: #dc2626;
-  background: #fef2f2;
-}
-
-button:disabled {
-  background: #999;
-  cursor: not-allowed;
-  opacity: 0.8;
+  background: #fafafa;
 }
 
 input:focus {
-  outline: 2px solid #6a11cb;
-  border-color: transparent;
+  outline: none;
+  border-color: #6d28d9;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
 }
 
-input.filled {
-  background-color: #f3ebff;
-}
-
-button {
-  background-color: #6a11cb;
+button[type='submit'] {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
   color: white;
   border: none;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
 }
 
-button:hover {
-  background-color: #4a008f;
+button[type='submit']:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
 }
 
-button[type='button'] {
-  background-color: #6c757d;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-}
-
-button[type='button']:hover {
-  background-color: #495057;
-}
-
-.error {
-  color: red;
-  margin: 10px 0;
-  text-align: center;
-}
-
-.logo img {
-  width: 100px;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-p {
-  margin: 10px 0;
-}
-
-.toggle-btn {
-  display: inline-block;
-  background: none;
-  border: none;
-  color: #6a11cb;
-  padding: 0;
-  margin-left: 5px;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.toggle-btn:hover {
-  text-decoration: underline;
-  color: #4a008f;
-}
-
-.toggle-text {
-  color: #666666;
-  font-size: 14px;
-  margin: 15px 0 0;
-}
-
-.form-footer {
-  text-align: center;
-  margin-top: 20px;
+button[type='submit']:active {
+  transform: translateY(0);
 }
 
 .modal__form-group {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
 }
 
-.modal__form-group p,
-.modal__form-group a {
-  color: rgba(148, 166, 190, 0.4);
+.modal__form-group p {
+  color: #666;
   font-size: 14px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.14px;
-}
-
-.modal__form-group a {
-  text-decoration: underline;
+  margin-bottom: 8px;
 }
 
 .modal__link {
-  color: #6a11cb;
+  color: #6d28d9;
   text-decoration: none;
-  transition: color 0.3s;
+  font-weight: 600;
+  font-size: 14px;
 }
 
-.modal__link:hover {
-  text-decoration: underline;
-  color: #4a008f;
+/* Медиа-запросы */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  form {
+    padding: 24px 20px;
+    border-radius: 10px;
+  }
+
+  form h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  input {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  button[type='submit'] {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+/* Landscape ориентация */
+@media (max-height: 600px) and (orientation: landscape) {
+  .login-container {
+    min-height: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  form {
+    max-width: 320px;
+  }
+}
+
+/* Мобильная версия (≤425px) */
+@media (max-width: 425px) {
+  .login-container {
+    padding: 14px !important;
+  }
+
+  form {
+    padding: 20px 16px !important;
+    max-width: 100% !important;
+  }
+
+  form h2 {
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+  }
+
+  input {
+    font-size: 14px !important;
+    padding: 12px !important;
+    margin-bottom: 14px !important;
+  }
+
+  button[type='submit'] {
+    font-size: 14px !important;
+    padding: 14px !important;
+  }
+
+  .modal__form-group p,
+  .modal__form-group a {
+    font-size: 12px !important;
+  }
 }
 </style>

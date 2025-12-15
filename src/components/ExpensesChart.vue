@@ -15,6 +15,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import Chart from 'chart.js/auto'
 
+
 const props = defineProps({
   categories: {
     type: Array,
@@ -185,5 +186,24 @@ watch(
 .chart canvas {
   width: 100%;
   height: 100%;
+}
+
+/* Мобильная версия (≤425px) */
+@media (max-width: 425px) {
+  .chart-container {
+    padding: 14px !important;
+  }
+
+  .chart-title h2 {
+    font-size: 20px !important;
+  }
+
+  .chart-title p {
+    font-size: 12px !important;
+  }
+
+  ::v-deep(.chartjs-datalabel) {
+    font-size: 10px !important;
+  }
 }
 </style>

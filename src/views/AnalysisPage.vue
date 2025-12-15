@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import AnalysisChart from "@/components/AnalysisChart.vue";
+import AnalysisChart from '@/components/AnalysisChart.vue'
 </script>
 
 <style scoped></style>

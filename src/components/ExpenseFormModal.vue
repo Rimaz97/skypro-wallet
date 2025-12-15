@@ -359,4 +359,63 @@ const resetForm = () => {
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
+
+/* Планшеты (до 1024px) */
+@media (max-width: 1024px) {
+  .new-expense-modal {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+/* Планшеты маленькие (до 768px) */
+@media (max-width: 768px) {
+  .new-expense-modal {
+    padding: 20px;
+  }
+}
+
+/* Мобильная версия (≤425px) */
+@media (max-width: 425px) {
+  .new-expense-modal {
+    padding: 16px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  .new-expense-modal h2 {
+    font-size: 20px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .form-group label {
+    font-size: 13px !important;
+  }
+
+  .form-group input {
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+  }
+
+  .category-card {
+    padding: 8px 10px !important;
+  }
+
+  .category-name {
+    font-size: 12px !important;
+  }
+
+  .category-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .submit-button {
+    font-size: 14px !important;
+    padding: 14px !important;
+  }
+
+  .error-star {
+    font-size: 12px !important;
+  }
+}
 </style>

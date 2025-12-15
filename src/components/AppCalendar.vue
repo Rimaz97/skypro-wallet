@@ -1,6 +1,5 @@
 <template>
   <div class="calendar-container">
-    <h2>Период</h2>
     <div class="calendar-wrapper">
       <div class="calendar-header">
         <div
@@ -195,7 +194,6 @@ watch(
   flex: 0 0 400px;
   background: white;
   border-radius: 12px;
-  padding: 25px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -280,12 +278,12 @@ h2 {
 }
 
 .day-cell:hover:not(.empty) {
-  background: #F1EBFD;
+  background: #f1ebfd;
 }
 
 .day-cell.selected {
-  background: #F1EBFD;
-  color: #7334EA;
+  background: #f1ebfd;
+  color: #7334ea;
   font-weight: 500;
   transform: scale(1.1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
