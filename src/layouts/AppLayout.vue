@@ -47,7 +47,7 @@ onMounted(async () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f0f0f0;
+  background-color: var(--color-bg-primary);
 }
 
 .content {
@@ -55,30 +55,25 @@ onMounted(async () => {
   padding: 20px;
 }
 
-/* Медиа-запросы */
-
-/* Планшеты (до 1024px) */
 @media (max-width: 1024px) {
   .content {
     padding: 16px;
   }
 }
 
-/* Планшеты маленькие (до 768px) */
 @media (max-width: 768px) {
   .content {
     padding: 12px;
   }
 }
 
-/* Мобильные (до 425px) - ДЕЛАЕМ БЕЛЫЙ ФОН ДЛЯ ЕДИНОГО ЦВЕТА */
 @media (max-width: 425px) {
   .content {
-    padding: 0;
+    padding: 8px 0;
   }
 
   .layout {
-    background-color: white; /* Меняем на белый для единства */
+    background-color: var(--color-bg-primary);
   }
 }
 </style>

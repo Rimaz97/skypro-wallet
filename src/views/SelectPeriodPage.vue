@@ -30,35 +30,20 @@ const router = useRouter()
 const selectedStartDate = ref(null)
 const selectedEndDate = ref(null)
 
-// Загружаем ранее выбранный период при загрузке страницы
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  const savedPeriod = localStorage.getItem('selectedPeriod')
-  if (savedPeriod) {
-    const { start, end } = JSON.parse(savedPeriod)
-    selectedStartDate.value = new Date(start)
-    selectedEndDate.value = new Date(end)
-  }
-})
+const hasSelectedPeriod = computed(() => !!selectedStartDate.value && !!selectedEndDate.value)
 
 const handleDateSelection = (start, end) => {
   selectedStartDate.value = start
   selectedEndDate.value = end
 }
 
-const hasSelectedPeriod = computed(() => !!selectedStartDate.value && !!selectedEndDate.value)
-
 const applySelectedPeriod = () => {
   if (selectedStartDate.value && selectedEndDate.value) {
-    // Сохраняем выбранный период в localStorage
     const period = {
       start: selectedStartDate.value.toISOString(),
       end: selectedEndDate.value.toISOString(),
     }
     localStorage.setItem('selectedPeriod', JSON.stringify(period))
-
-    // Возвращаемся на страницу анализа
     router.push('/analysis')
   }
 }
@@ -74,7 +59,7 @@ const goBackToAnalysis = () => {
   margin: 0 auto;
   padding: 30px;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--color-bg-tertiary);
 }
 
 .page-header {
@@ -87,36 +72,37 @@ const goBackToAnalysis = () => {
 
 .page-header h1 {
   font-size: 32px;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .back-btn {
   background: none;
   border: none;
-  color: rgba(153, 153, 153, 1);
+  color: var(--color-text-tertiary);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   padding: 8px 0;
   transition: opacity 0.2s;
+  margin-bottom: 8px;
 }
 
 .back-btn:hover {
   opacity: 0.8;
-  color: #6d28d9;
+  color: var(--color-primary);
 }
 
 .page-actions {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
 }
 
 .apply-btn {
   width: 100%;
   padding: 20px;
-  background: #6d28d9;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -127,11 +113,12 @@ const goBackToAnalysis = () => {
 }
 
 .apply-btn:hover:not(:disabled) {
-  background: #5b21b6;
+  background: var(--color-primary-hover);
 }
 
 .apply-btn:disabled {
-  background: #d1d5db;
+  background: var(--color-border);
+  color: var(--color-text-tertiary);
   cursor: not-allowed;
 }
 
@@ -166,9 +153,11 @@ const goBackToAnalysis = () => {
   }
 }
 
+/* Мобильная версия (≤425px) */
 @media (max-width: 425px) {
   .select-period-page {
-    padding: 16px;
+    padding: 16px !important;
+    background: var(--color-bg-primary) !important;
   }
 
   .page-header {
@@ -176,17 +165,24 @@ const goBackToAnalysis = () => {
   }
 
   .page-header h1 {
-    font-size: 22px;
+    font-size: 22px !important;
   }
 
   .back-btn {
-    font-size: 14px;
+    font-size: 14px !important;
   }
 
   .apply-btn {
-    padding: 14px;
-    font-size: 15px;
-    border-radius: 6px;
+    padding: 14px !important;
+    font-size: 15px !important;
+    border-radius: 6px !important;
+  }
+
+  .calendar-wrapper {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 1px 3px var(--color-shadow);
   }
 }
 </style>

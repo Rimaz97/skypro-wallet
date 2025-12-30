@@ -1,5 +1,4 @@
 <template>
-  <div class="calendar-container">
     <div class="calendar-wrapper">
       <div class="calendar-header">
         <div
@@ -41,7 +40,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -192,20 +190,14 @@ watch(
 <style scoped>
 .calendar-container {
   flex: 0 0 400px;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  font-size: 24px;
-  color: #000000;
-  margin-bottom: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .calendar-wrapper {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   height: 500px;
   overflow: hidden;
@@ -214,12 +206,12 @@ h2 {
 .calendar-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background-color: white;
+  background-color: var(--card-bg);
   padding: 10px 0;
   position: sticky;
   top: 0;
   z-index: 2;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .calendar-scroll {
@@ -235,11 +227,11 @@ h2 {
   padding: 16px 8px;
   font-size: 16px;
   font-weight: 600;
-  color: #000000;
-  background: white;
+  color: var(--color-text-primary);
+  background: var(--card-bg);
   top: 40px;
   z-index: 1;
-  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px -2px var(--color-shadow);
 }
 
 .month-days {
@@ -252,7 +244,7 @@ h2 {
 .day-header {
   text-align: center;
   font-size: 12px;
-  color: #999999;
+  color: var(--color-text-tertiary);
   padding: 8px;
   width: 36px;
   margin: 0 auto;
@@ -270,33 +262,29 @@ h2 {
   transition: all 0.2s;
   margin: 2px auto;
   background: transparent;
+  color: var(--color-text-primary);
 }
 
 .day-cell:not(.current-month) {
-  background: #f8fafc;
-  color: #a0aec0;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .day-cell:hover:not(.empty) {
-  background: #f1ebfd;
+  background: var(--table-row-hover);
 }
 
 .day-cell.selected {
-  background: #f1ebfd;
-  color: #7334ea;
+  background: var(--table-row-selected);
+  color: var(--color-primary);
   font-weight: 500;
   transform: scale(1.1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.day-cell.selected[data-single='true'] {
-  background: #8b5cf6;
-  animation: pulse 1s ease-in-out infinite;
+  box-shadow: 0 2px 6px var(--color-shadow);
 }
 
 .day-cell.in-range {
-  background: #ede9fe;
-  color: #6d28d9;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
   transform: scale(1.05);
 }
 
@@ -305,29 +293,33 @@ h2 {
   pointer-events: none;
 }
 
-.day-cell.single-day {
-  background: #6d28d9;
-  color: white;
-  font-weight: bold;
-  animation: pulse 0.5s ease-in-out infinite;
-}
-
-.day-cell.selected-end {
-  background: #4c1d95;
-  color: white;
-  transform: scale(1.08);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
+/* Мобильная версия (≤425px) */
+@media (max-width: 425px) {
+  .calendar-container {
+    width: 100%;
+    flex: 0 0 auto;
   }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
+
+  .calendar-wrapper {
+    height: 400px;
+  }
+
+  .month-header {
+    padding: 12px 4px;
+    font-size: 14px;
+  }
+
+  .day-cell {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    margin: 1px auto;
+  }
+
+  .day-header {
+    font-size: 11px;
+    padding: 6px;
+    width: 32px;
   }
 }
 </style>

@@ -68,7 +68,9 @@
       </div>
 
       <p v-if="error" class="error">{{ error }}</p>
-      <button type="submit" class="submit-button" :disabled="isDisabled">Добавить новый расход</button>
+      <button type="submit" class="submit-button" :disabled="isDisabled">
+        Добавить новый расход
+      </button>
     </form>
   </div>
 </template>
@@ -76,6 +78,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { expensesStore } from '@/store/expenses'
+import { CATEGORIES, CATEGORIES_RU_TO_EN } from '@/constants/categories' // Импортируем из констант
 import foodIcon from '@/assets/icons/food.svg'
 import carIcon from '@/assets/icons/car.svg'
 import houseIcon from '@/assets/icons/house.svg'
@@ -85,7 +88,7 @@ import messageIcon from '@/assets/icons/message.svg'
 
 const formData = ref({
   description: '',
-  category: 'Еда',
+  category: 'Еда', // Первая категория по умолчанию
   date: '',
   amount: null,
 })
@@ -98,23 +101,27 @@ const errors = ref({
   amount: false,
 })
 
-const categories = [
-  { name: 'Еда', icon: foodIcon },
-  { name: 'Транспорт', icon: carIcon },
-  { name: 'Жилье', icon: houseIcon },
-  { name: 'Развлечения', icon: gameIcon },
-  { name: 'Образование', icon: studyIcon },
-  { name: 'Другое', icon: messageIcon },
-]
-
-const categoryMapping = {
-  Еда: 'food',
-  Транспорт: 'transport',
-  Жилье: 'housing',
-  Развлечения: 'joy',
-  Образование: 'education',
-  Другое: 'others',
+// Маппинг иконок
+const iconMapping = {
+  food: foodIcon,
+  transport: carIcon,
+  housing: houseIcon,
+  entertainment: gameIcon,
+  education: studyIcon,
+  other: messageIcon,
 }
+
+// Автоматически генерируем категории из констант
+const categories = computed(() => {
+  return Object.keys(CATEGORIES).map((key) => ({
+    name: CATEGORIES[key].ru,
+    icon: iconMapping[key],
+    key: key,
+  }))
+})
+
+// Используем готовый маппинг из констант
+const categoryMapping = CATEGORIES_RU_TO_EN
 
 const isDisabled = computed(() => {
   return (
@@ -157,9 +164,17 @@ const handleSubmit = async () => {
   }
 
   try {
+    // Используем маппинг из констант
+    const categoryKey = categoryMapping[formData.value.category]
+
+    if (!categoryKey) {
+      error.value = 'Выберите корректную категорию'
+      return
+    }
+
     await expensesStore.addExpense({
       description: formData.value.description.trim(),
-      category: categoryMapping[formData.value.category],
+      category: categoryKey,
       date: formData.value.date,
       sum: formData.value.amount,
     })
@@ -193,10 +208,10 @@ const resetForm = () => {
 
 <style scoped>
 .new-expense-modal {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px var(--color-shadow);
   max-width: 500px;
   width: 379px;
 }
@@ -204,9 +219,8 @@ const resetForm = () => {
 .new-expense-modal h2 {
   font-size: 24px;
   font-weight: 700;
-
   margin-bottom: 24px;
-  color: #000000;
+  color: var(--color-text-primary);
 }
 
 .form-group {
@@ -218,11 +232,11 @@ const resetForm = () => {
   margin-bottom: 8px;
   font-weight: 600;
   font-size: 16px;
-  color: #000000;
+  color: var(--color-text-primary);
 }
 
 .error-star {
-  color: #dc2626; /* красный */
+  color: var(--color-danger);
   margin-left: 3px;
   font-weight: bold;
 }
@@ -230,46 +244,52 @@ const resetForm = () => {
 .form-group input {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 12px;
   transition: all 0.2s;
   box-sizing: border-box;
   height: 48px;
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--input-bg);
+  color: var(--color-text-primary);
+}
+
+.form-group input::placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0.7;
 }
 
 .submit-button:disabled {
-  background: #999999;
+  background: var(--color-text-tertiary);
   cursor: not-allowed;
   opacity: 0.8;
 }
 
 .form-group input:focus {
-  border-color: #6366f1;
+  border-color: var(--color-primary);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 2px var(--color-primary-hover);
 }
 
 .form-group input.valid {
-  background: #f3ebff;
-  box-shadow: 0 0 0 1px #7334ea;
-  border: 1px solid transparent;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-primary);
 }
 
 .form-group input.valid:focus {
-  border-color: #7334ea;
-  box-shadow: 0 0 0 2px rgba(115, 52, 234, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-hover);
 }
 
 .form-group input.invalid {
-  border-color: #dc2626;
-  background: #fef2f2;
+  border-color: var(--color-danger);
+  background: var(--color-bg-secondary);
   animation: shake 0.4s ease-in-out;
 }
 
 .form-group input.invalid:focus {
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+  box-shadow: 0 0 0 2px var(--color-danger);
 }
 
 @keyframes shake {
@@ -303,7 +323,7 @@ const resetForm = () => {
   height: 31px;
   min-width: 60px;
   padding: 8px 20px;
-  background: #f4f5f6;
+  background: var(--color-bg-secondary);
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.2s;
@@ -311,31 +331,36 @@ const resetForm = () => {
   border: 1px solid transparent;
 }
 
+.category-card:hover {
+  background: var(--color-bg-tertiary);
+}
+
 .category-card:hover .category-icon {
-  color: #7334ea;
+  filter: brightness(var(--icon-brightness));
 }
 
 .category-card.active {
-  background: rgba(115, 52, 234, 0.1);
-  border-color: #7334ea;
+  background: var(--table-row-selected);
+  border-color: var(--color-primary);
 }
 
 .category-card.active .category-icon,
 .category-card.active .category-name {
-  color: #7334ea;
+  filter: brightness(var(--icon-brightness));
 }
 
 .category-icon {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  color: #333;
+  color: var(--color-text-secondary);
   transition: color 0.2s;
+  filter: brightness(var(--icon-brightness));
 }
 
 .category-name {
   font-size: 14px;
-  color: #333;
+  color: var(--color-text-primary);
   white-space: nowrap;
   transition: color 0.2s;
 }
@@ -344,11 +369,18 @@ const resetForm = () => {
   display: block;
 }
 
+.error {
+  color: var(--color-danger);
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
 .submit-button {
   width: 100%;
   padding: 10px 20px;
-  background: #7334ea;
-  color: #ffffff;
+  background: var(--color-primary);
+  color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -358,6 +390,10 @@ const resetForm = () => {
   height: 48px;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: var(--color-primary-hover);
 }
 
 /* Планшеты (до 1024px) */
@@ -380,6 +416,9 @@ const resetForm = () => {
   .new-expense-modal {
     padding: 16px 14px !important;
     border-radius: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: 0 2px 8px var(--color-shadow) !important;
   }
 
   .new-expense-modal h2 {
@@ -389,15 +428,23 @@ const resetForm = () => {
 
   .form-group label {
     font-size: 13px !important;
+    margin-bottom: 6px !important;
   }
 
   .form-group input {
     font-size: 14px !important;
     padding: 10px 12px !important;
+    height: 44px !important;
+  }
+
+  .category-grid {
+    gap: 4px !important;
   }
 
   .category-card {
-    padding: 8px 10px !important;
+    padding: 8px 12px !important;
+    height: 28px !important;
+    min-width: 55px !important;
   }
 
   .category-name {
@@ -405,17 +452,60 @@ const resetForm = () => {
   }
 
   .category-icon {
-    width: 20px !important;
-    height: 20px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .submit-button {
     font-size: 14px !important;
-    padding: 14px !important;
+    padding: 12px !important;
+    height: 44px !important;
   }
 
   .error-star {
     font-size: 12px !important;
+  }
+
+  .form-row {
+    gap: 12px !important;
+  }
+}
+
+/* Мобильная версия (≤375px) */
+@media (max-width: 375px) {
+  .new-expense-modal {
+    padding: 14px 12px !important;
+  }
+
+  .new-expense-modal h2 {
+    font-size: 18px !important;
+  }
+
+  .category-card {
+    padding: 6px 10px !important;
+    min-width: 50px !important;
+    height: 26px !important;
+  }
+
+  .category-name {
+    font-size: 11px !important;
+  }
+
+  .category-icon {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .form-group input {
+    font-size: 13px !important;
+    padding: 8px 10px !important;
+    height: 40px !important;
+  }
+
+  .submit-button {
+    font-size: 13px !important;
+    padding: 10px !important;
+    height: 40px !important;
   }
 }
 </style>

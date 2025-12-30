@@ -3,7 +3,18 @@
     <h1>Анализ расходов</h1>
 
     <div class="analysis-wrapper">
-      <!-- Первая колонка: Период (календарь) -->
+      <!-- Первая колонка: График -->
+        <div class="chart-container">
+          <ExpensesChart
+            :expenses="chartReadyData"
+            :is-loading="isLoading"
+            :start-date="formattedStartDate"
+            :end-date="formattedEndDate"
+            class="chart-component"
+          />
+        </div>
+
+      <!-- Вторая колонка: Период (календарь) -->
       <div class="period-column">
         <div class="period-header">
           <h2>Период</h2>
@@ -13,19 +24,6 @@
             @date-selected="handleDateSelection"
             :selected-start="selectedStartDate"
             :selected-end="selectedEndDate"
-          />
-        </div>
-      </div>
-
-      <!-- Вторая колонка: График -->
-      <div class="chart-column">
-        <div class="chart-container">
-          <ExpensesChart
-            :expenses="chartReadyData"
-            :is-loading="isLoading"
-            :start-date="formattedStartDate"
-            :end-date="formattedEndDate"
-            class="chart-component"
           />
         </div>
       </div>
@@ -106,18 +104,15 @@ const formattedEndDate = computed(
     }) || '',
 )
 
-// Обработчик выбора даты в календаре
 const handleDateSelection = (start, end) => {
   selectedStartDate.value = start
   selectedEndDate.value = end
 }
 
-// Переход на страницу выбора периода
 const goToSelectPeriodPage = () => {
   router.push('/analysis/select-period')
 }
 
-// При монтировании проверяем, есть ли выбранный период в URL или локальном хранилище
 import { onMounted } from 'vue'
 
 onMounted(() => {
@@ -146,23 +141,27 @@ watch([selectedStartDate, selectedEndDate], ([newStart, newEnd], [oldStart, oldE
 
 h1 {
   font-size: 32px;
-  color: #000000;
+  color: var(--color-text-primary);
   margin-bottom: 30px;
 }
 
 .analysis-wrapper {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: 1fr 400px;
   gap: 30px;
   margin-bottom: 30px;
 }
 
-/* Колонка с периодом */
+.chart-column,
 .period-column {
-  background: white;
+  padding: 0;
+}
+
+.period-column {
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px var(--color-shadow);
   position: relative;
   height: fit-content;
 }
@@ -177,26 +176,24 @@ h1 {
 .period-header h2 {
   width: 101px;
   height: 29px;
-  color: #000000;
+  color: var(--color-text-primary);
   font-size: 24px;
   font-weight: 700;
   margin: 0;
 }
 
 .calendar-container {
-  padding-top: 80px; /* 32px (отступ сверху) + 29px (высота заголовка) + 19px (доп. отступ) */
+  padding-top: 80px;
   padding-left: 32px;
   padding-right: 32px;
   padding-bottom: 32px;
 }
 
-/* Колонка с графиком */
 .chart-column {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px var(--color-shadow);
   height: 623.67px;
 }
 
@@ -215,7 +212,7 @@ h1 {
   width: 100%;
   max-width: 1200px;
   padding: 20px;
-  background: #6d28d9;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -227,22 +224,21 @@ h1 {
 }
 
 .select-period-btn:hover {
-  background: #5b21b6;
+  background: var(--color-primary-hover);
 }
 
 .error-status {
   margin-top: 20px;
-  color: #e53e3e;
+  color: var(--color-danger);
   font-size: 14px;
   padding: 10px;
-  border: 1px solid #fed7d7;
+  border: 1px solid var(--color-danger);
   border-radius: 6px;
-  background: #fff5f5;
+  background: var(--color-bg-secondary);
 }
 
-/* Медиа-запросы для адаптивности */
+/* Медиа-запросы */
 
-/* Планшеты (≤1024px) */
 @media (max-width: 1024px) {
   .container {
     padding: 24px;
@@ -253,19 +249,26 @@ h1 {
   }
 
   .analysis-wrapper {
+    grid-template-columns: 1fr;
     gap: 24px;
   }
 
   .period-column {
+    display: none;
     padding: 24px;
   }
 
   .chart-column {
     padding: 16px;
   }
+
+    .select-period-btn {
+    display: block;
+    padding: 16px;
+    font-size: 16px;
+  }
 }
 
-/* Мобильная версия (≤768px) */
 @media (max-width: 768px) {
   .container {
     padding: 20px;
@@ -282,18 +285,18 @@ h1 {
     margin-bottom: 20px;
   }
 
-  .period-column {
-    display: none;
+  .chart-column {
+    padding: 16px;
+    height: 500px;
   }
 
-  .select-period-btn {
-    display: block;
-    padding: 16px;
-    font-size: 16px;
+  .chart-container {
+    padding: 0;
   }
+
+
 }
 
-/* Мобильная версия (≤425px) */
 @media (max-width: 425px) {
   .container {
     padding: 16px;
@@ -308,10 +311,27 @@ h1 {
     margin-bottom: 16px;
   }
 
+  .chart-column {
+    padding: 12px;
+    height: 400px;
+    border-radius: 8px;
+  }
+
   .select-period-btn {
     padding: 14px;
     font-size: 15px;
     border-radius: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .container {
+    padding: 12px;
+  }
+
+  .chart-column {
+    padding: 10px;
+    height: 350px;
   }
 }
 </style>

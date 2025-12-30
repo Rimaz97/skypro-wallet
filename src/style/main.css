@@ -1,9 +1,66 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
+/* CSS переменные для темы */
+:root {
+  /* Основные цвета (светлая тема) */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f0f0f0;
+  --color-bg-tertiary: #f8f9fa;
+  --color-text-primary: #000000;
+  --color-text-secondary: #333333;
+  --color-text-tertiary: #666666;
+  --color-border: #e2e8f0;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-primary: #6d28d9;
+  --color-primary-hover: #5b21b6;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+
+  /* Компоненты */
+  --card-bg: #ffffff;
+  --input-bg: #fafafa;
+  --table-header-bg: #ffffff;
+  --table-row-hover: #f9fafb;
+  --table-row-selected: #f8f5ff;
+  --icon-brightness: 1;
+}
+
+[data-theme='dark'] {
+  /* Основные цвета (темная тема) */
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #121212;
+  --color-bg-tertiary: #0f0f0f;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e0e0e0;
+  --color-text-tertiary: #a0a0a0;
+  --color-border: #333333;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+
+  /* Компоненты */
+  --card-bg: #2d2d2d;
+  --input-bg: #333333;
+  --table-header-bg: #2d2d2d;
+  --table-row-hover: #3a3a3a;
+  --table-row-selected: #3a2e5a;
+  --icon-brightness: 0.8;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 html,
@@ -11,17 +68,61 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #333;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
 }
 
 p {
   font-family: 'Montserrat', sans-serif;
   margin-bottom: 1rem;
+  color: var(--color-text-secondary);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+button {
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--input-bg);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb, 109, 40, 217), 0.1);
+}
+
+/* Мобильная версия (≤425px) */
 @media (max-width: 425px) {
   html {
     font-size: 14px;
+  }
+
+  h1 {
+    font-size: 22px !important;
+    margin-bottom: 18px !important;
   }
 
   h2 {
@@ -29,47 +130,60 @@ p {
     margin-bottom: 16px !important;
   }
 
-  /* Уменьшаем кнопки */
-  button, .btn, .submit-button, .select-period-btn {
-    font-size: 14px !important; /* Уменьшаем на 30% с 20px */
+  .container,
+  .content,
+  .layout,
+  .login-container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  button,
+  .btn,
+  .submit-button,
+  .select-period-btn {
+    font-size: 14px !important;
     padding: 10px 14px !important;
   }
 
-  /* Уменьшаем поля ввода */
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 14px !important;
     padding: 10px 12px !important;
   }
 
-  /* Уменьшаем таблицы */
-  th, td {
+  th,
+  td {
     font-size: 12px !important;
     padding: 10px 8px !important;
   }
 
-  /* Уменьшаем иконки */
-  .category-icon, .delete-icon {
+  .category-icon,
+  .delete-icon {
     width: 18px !important;
     height: 18px !important;
   }
 }
 
 /* Ещё меньшие экраны (≤375px) */
-@media (max-width: 375px) {
+@media (max-width: 376px) {
   html {
     font-size: 13px;
   }
 
   h1 {
-    font-size: 20px !important;
+    font-size: 18px !important;
   }
 
   h2 {
     font-size: 16px !important;
   }
 
-  button, .btn, .submit-button {
-    padding: 8px 12px !important;
+  button,
+  .btn,
+  .submit-button {
+    padding: 8px !important;
     font-size: 13px !important;
   }
 }

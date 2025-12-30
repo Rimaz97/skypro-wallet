@@ -157,17 +157,17 @@ const isDisabled = computed(() => {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--color-bg-secondary);
   padding: 20px;
 }
 
 form {
   width: 100%;
   max-width: 400px;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 32px 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px var(--color-shadow);
   box-sizing: border-box;
 }
 
@@ -175,32 +175,37 @@ form h2 {
   text-align: center;
   margin-bottom: 24px;
   font-size: 24px;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 input {
   width: 100%;
   padding: 14px 16px;
   margin-bottom: 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.2s ease;
   box-sizing: border-box;
-  background: #fafafa;
+  background: var(--input-bg);
+  color: var(--color-text-primary);
+}
+
+input::placeholder {
+  color: var(--color-text-tertiary);
 }
 
 input:focus {
   outline: none;
-  border-color: #6d28d9;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+  border-color: var(--color-primary);
+  background: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-hover);
 }
 
 button[type='submit'] {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -213,31 +218,38 @@ button[type='submit'] {
 
 button[type='submit']:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
-}
-
-button[type='submit']:active {
-  transform: translateY(0);
+  box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .modal__form-group {
   text-align: center;
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-border);
 }
 
 .modal__form-group p {
-  color: #666;
+  color: var(--color-text-tertiary);
   font-size: 14px;
   margin-bottom: 8px;
 }
 
 .modal__link {
-  color: #6d28d9;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 14px;
+  text-align: center;
+  margin: 10px 0;
+  padding: 10px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--color-danger);
 }
 
 /* Медиа-запросы */
@@ -267,20 +279,6 @@ button[type='submit']:active {
   }
 }
 
-/* Landscape ориентация */
-@media (max-height: 600px) and (orientation: landscape) {
-  .login-container {
-    min-height: auto;
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  form {
-    max-width: 320px;
-  }
-}
-
-/* Мобильная версия (≤425px) */
 @media (max-width: 425px) {
   .login-container {
     padding: 14px !important;

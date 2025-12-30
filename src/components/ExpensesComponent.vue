@@ -33,18 +33,19 @@ import ExpenseFormModal from './ExpenseFormModal.vue'
   padding: 30px;
   min-height: 100vh;
   box-sizing: border-box;
+  background: var(--color-bg-primary);
 }
 
 .header-section {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: 30px;
 }
 
 h1 {
   font-size: 32px;
-  color: #000000;
+  color: var(--color-text-primary);
   margin-bottom: 0;
   font-weight: 700;
 }
@@ -57,7 +58,6 @@ h1 {
   box-sizing: border-box;
 }
 
-/* Кнопка "Новый расход" для мобильных и планшетов */
 .mobile-new-expense-btn-container {
   display: none;
 }
@@ -68,12 +68,11 @@ h1 {
   gap: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
-  flex-direction: row-reverse;
 }
 
 .mobile-new-expense-text {
   font-size: 16px;
-  color: #000000;
+  color: var(--color-text-primary);
   transition: color 0.2s;
 }
 
@@ -81,26 +80,23 @@ h1 {
   width: 20px;
   height: 20px;
   transition: filter 0.2s;
-  order: 1; /* Иконка справа */
+  order: 1;
+  filter: brightness(var(--icon-brightness));
 }
 
 .mobile-new-expense-link:hover .mobile-new-expense-text {
-  color: rgba(115, 52, 234, 1);
+  color: var(--color-primary);
 }
 
 .mobile-new-expense-link:hover .add-icon {
-  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(2000%) hue-rotate(245deg)
-    brightness(90%) contrast(90%);
+  filter: brightness(1.2);
 }
 
-/* Форма для десктопа */
 .desktop-form {
   display: block;
 }
 
 /* Медиа-запросы */
-
-/* Планшеты и мобильные (≤1024px) */
 @media (max-width: 1024px) {
   .container {
     padding: 24px;
@@ -128,7 +124,6 @@ h1 {
   }
 }
 
-/* Мобильная версия (≤768px) */
 @media (max-width: 768px) {
   .container {
     padding: 20px;
@@ -139,17 +134,15 @@ h1 {
   }
 }
 
-/* Мобильная версия (≤425px) - УБИРАЕМ ОТСТУПЫ И ДЕЛАЕМ ОДНИМ ЦЕЛЫМ */
 @media (max-width: 425px) {
   .container {
     padding: 0;
-    background: transparent;
+    background: var(--color-bg-primary);
   }
 
   .header-section {
-    padding: 16px 16px 12px 16px;
     margin-bottom: 0;
-    background: white;
+    background: var(--card-bg);
   }
 
   h1 {
@@ -159,7 +152,7 @@ h1 {
   .content-wrapper {
     grid-template-columns: 1fr;
     gap: 0;
-    background: transparent;
+    background: var(--color-bg-primary);
   }
 
   .mobile-new-expense-text {
@@ -172,7 +165,6 @@ h1 {
   }
 }
 
-/* Ещё меньшие экраны (≤375px) */
 @media (max-width: 375px) {
   .header-section {
     padding: 14px 14px 10px 14px;

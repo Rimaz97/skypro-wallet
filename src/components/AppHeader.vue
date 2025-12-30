@@ -10,15 +10,19 @@
         <router-link to="/expenses" class="nav-link" :exact-active-class="'active'">
           Мои расходы
         </router-link>
-        <!-- Убираем "Новый расход" из десктопного меню -->
         <router-link to="/analysis" class="nav-link" :exact-active-class="'active'">
           Анализ расходов
         </router-link>
       </nav>
 
-      <button class="logout-btn" @click="handleLogout" :disabled="isLoggingOut">
-        {{ isLoggingOut ? 'Выход...' : 'Выйти' }}
-      </button>
+      <div class="header-controls">
+        <button class="theme-toggle" @click="toggleTheme" :title="themeTitle">
+          {{ themeIcon }}
+        </button>
+        <button class="logout-btn" @click="handleLogout" :disabled="isLoggingOut">
+          {{ isLoggingOut ? 'Выход...' : 'Выйти' }}
+        </button>
+      </div>
     </div>
 
     <!-- Мобильная версия (≤768px) -->
@@ -27,7 +31,6 @@
         <img src="@/assets/icons/wallet-logo.svg" alt="Логотип" />
       </div>
 
-      <!-- Выпадающее меню с текущей страницей -->
       <div class="mobile-page-selector" :class="{ open: isDropdownOpen }">
         <button class="current-page-btn" @click="toggleDropdown">
           <span class="current-page-name">{{ currentPageName }}</span>
@@ -46,16 +49,15 @@
         </div>
       </div>
 
-      <button class="mobile-logout-btn" @click="handleLogout" :disabled="isLoggingOut">
-        {{ isLoggingOut ? '...' : 'Выйти' }}
-      </button>
-    </div>
-
-    <transition name="fade">
-      <div v-if="logoutError" class="error-message">
-        {{ logoutError }}
+      <div class="mobile-controls">
+        <button class="mobile-theme-toggle" @click="toggleTheme" :title="themeTitle">
+          {{ themeIcon }}
+        </button>
+        <button class="mobile-logout-btn" @click="handleLogout" :disabled="isLoggingOut">
+          {{ isLoggingOut ? '...' : 'Выйти' }}
+        </button>
       </div>
-    </transition>
+    </div>
   </header>
 </template>
 
@@ -67,23 +69,39 @@ import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 const isLoggingOut = ref(false)
-const logoutError = ref(null)
 const isDropdownOpen = ref(false)
+const currentTheme = ref('light')
 
-// Названия страниц для отображения в выпадающем меню
 const pageNames = {
   '/expenses': 'Мои расходы',
   '/expenses/new': 'Новый расход',
   '/analysis': 'Анализ расходов',
   '/analysis/select-period': 'Выбор периода',
-  '/signin': 'Вход',
-  '/signup': 'Регистрация',
 }
 
-// Получаем название текущей страницы
 const currentPageName = computed(() => {
   return pageNames[route.path] || 'Мои расходы'
 })
+
+const themeIcon = computed(() => {
+  return currentTheme.value === 'light' ? '🌙' : '☀️'
+})
+
+const themeTitle = computed(() => {
+  return currentTheme.value === 'light' ? 'Темная тема' : 'Светлая тема'
+})
+
+const toggleTheme = () => {
+  currentTheme.value = currentTheme.value === 'light' ? 'dark' : 'light'
+  document.documentElement.setAttribute('data-theme', currentTheme.value)
+  localStorage.setItem('theme', currentTheme.value)
+}
+
+const loadTheme = () => {
+  const savedTheme = localStorage.getItem('theme') || 'light'
+  currentTheme.value = savedTheme
+  document.documentElement.setAttribute('data-theme', savedTheme)
+}
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
@@ -96,27 +114,15 @@ const closeDropdown = () => {
 const handleLogout = async () => {
   try {
     isLoggingOut.value = true
-    logoutError.value = null
-
     await authStore.logout()
-
-    if (route.path !== '/signin') {
-      router.replace('/signin').catch(() => {
-        window.location.href = '/signin'
-      })
-    }
+    router.replace('/signin')
   } catch (error) {
     console.error('Ошибка при выходе:', error)
-    logoutError.value = 'Не удалось выйти. Попробуйте ещё раз.'
-    setTimeout(() => {
-      logoutError.value = null
-    }, 5000)
   } finally {
     isLoggingOut.value = false
   }
 }
 
-// Закрываем меню при клике вне его
 const handleClickOutside = (event) => {
   if (!event.target.closest('.mobile-page-selector')) {
     closeDropdown()
@@ -124,6 +130,7 @@ const handleClickOutside = (event) => {
 }
 
 onMounted(() => {
+  loadTheme()
   document.addEventListener('click', handleClickOutside)
 })
 
@@ -134,11 +141,11 @@ onUnmounted(() => {
 
 <style scoped>
 .header {
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+  box-shadow: 0 2px 10px var(--color-shadow);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* Десктопная версия - видна на 769px и выше */
 .desktop-header {
   display: flex;
   justify-content: space-between;
@@ -160,7 +167,7 @@ onUnmounted(() => {
 }
 
 .nav-link {
-  color: #000000;
+  color: var(--color-text-primary);
   text-decoration: none;
   font-size: 14px;
   transition: all 0.2s ease;
@@ -169,12 +176,12 @@ onUnmounted(() => {
 }
 
 .nav-link:hover:not(.active) {
-  color: #6d28d9;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .nav-link.active {
-  color: #6d28d9;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -185,14 +192,36 @@ onUnmounted(() => {
   bottom: -4px;
   width: 100%;
   height: 2px;
-  background: #6d28d9;
+  background: var(--color-primary);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+}
+
+.theme-toggle:hover {
+  background: var(--color-bg-secondary);
+  transform: scale(1.1);
 }
 
 .logout-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #000000;
+  color: var(--color-text-primary);
   font-size: 14px;
   font-weight: 600;
   padding: 8px 16px;
@@ -202,11 +231,10 @@ onUnmounted(() => {
 }
 
 .logout-btn:hover {
-  background: #f5f5f5;
-  color: #6d28d9;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
 }
 
-/* Мобильная версия - видна только до 768px включительно */
 .mobile-header {
   display: none;
   justify-content: space-between;
@@ -221,7 +249,7 @@ onUnmounted(() => {
   gap: 8px;
   background: none;
   border: none;
-  color: #000000;
+  color: var(--color-text-primary);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -229,10 +257,6 @@ onUnmounted(() => {
   border-radius: 8px;
   transition: background-color 0.2s;
   white-space: nowrap;
-}
-
-.current-page-btn:hover {
-  background: #f5f5f5;
 }
 
 .dropdown-arrow {
@@ -249,12 +273,13 @@ onUnmounted(() => {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--color-shadow);
   margin-top: 4px;
   overflow: hidden;
   min-width: 200px;
+  border: 1px solid var(--color-border);
 }
 
 .dropdown-content {
@@ -264,11 +289,11 @@ onUnmounted(() => {
 
 .dropdown-item {
   padding: 14px 20px;
-  color: #333;
+  color: var(--color-text-primary);
   text-decoration: none;
   font-size: 16px;
   transition: background-color 0.2s;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .dropdown-item:last-child {
@@ -276,47 +301,53 @@ onUnmounted(() => {
 }
 
 .dropdown-item:hover {
-  background: #f8f5ff;
-  color: #6d28d9;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
 }
 
 .dropdown-item.router-link-active {
-  background: #f8f5ff;
-  color: #6d28d9;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
   font-weight: 600;
+}
+
+.mobile-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+}
+
+.mobile-theme-toggle:hover {
+  background: var(--color-bg-secondary);
 }
 
 .mobile-logout-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #000000;
+  color: var(--color-text-primary);
   font-size: 14px;
   font-weight: 600;
-  padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .mobile-logout-btn:hover {
-  background: #f5f5f5;
-  color: #6d28d9;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
 }
 
-/* Медиа-запросы */
-
-/* Планшеты (769px - 1024px) */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .desktop-header {
-    padding: 16px 32px;
-  }
-
-  .desktop-nav {
-    gap: 30px;
-  }
-}
-
-/* Мобильная версия (≤768px) */
 @media (max-width: 768px) {
   .desktop-header {
     display: none;
@@ -324,31 +355,6 @@ onUnmounted(() => {
 
   .mobile-header {
     display: flex;
-  }
-
-  .logo img {
-    height: 22px;
-  }
-
-  .current-page-name {
-    font-size: 16px;
-  }
-
-  .dropdown-item {
-    font-size: 16px;
-    padding: 12px 20px;
-  }
-
-  .mobile-logout-btn {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-}
-
-/* Мобильная версия (≤425px) */
-@media (max-width: 425px) {
-  .mobile-header {
-    padding: 10px 14px;
   }
 
   .logo img {
@@ -360,37 +366,41 @@ onUnmounted(() => {
   }
 
   .dropdown-item {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 425px) {
+
+  .mobile-header {
+    padding: 10px 14px;
+  }
+
+  .logo img {
+    height: 14px;
+  }
+
+  .current-page-name {
+    font-size: 12px;
+  }
+
+  .dropdown-item {
     font-size: 14px;
     padding: 12px 16px;
+  }
+
+  .dropdown-arrow{
+    font-size: 10px;
+  }
+
+  .mobile-theme-toggle {
+    font-size: 16px;
   }
 
   .mobile-logout-btn {
     font-size: 12px;
     padding: 6px 10px;
-  }
-}
-
-/* Ещё меньшие экраны (≤375px) */
-@media (max-width: 376px) {
-  .mobile-header {
-    padding: 8px 12px;
-  }
-
-  .logo img {
-    height: 16px;
-  }
-
-  .current-page-btn {
-    padding: 6px 10px;
-  }
-
-  .current-page-name {
-    font-size: 13px;
-  }
-
-  .dropdown-item {
-    font-size: 13px;
-    padding: 10px 14px;
   }
 }
 </style>
