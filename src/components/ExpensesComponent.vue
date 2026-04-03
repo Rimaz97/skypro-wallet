@@ -1,10 +1,22 @@
 <template>
   <div class="container">
-    <h1>Мои расходы</h1>
+    <div class="header-section">
+      <h1>Мои расходы</h1>
+      <!-- Кнопка "Новый расход" для мобильных и планшетов (1024px и ниже) -->
+      <div class="mobile-new-expense-btn-container">
+        <router-link to="/expenses/new" class="mobile-new-expense-link">
+          <span class="mobile-new-expense-text">Новый расход</span>
+          <img src="@/assets/icons/vuesax_bold_add-circle.svg" alt="+" class="add-icon" />
+        </router-link>
+      </div>
+    </div>
+
     <div class="content-wrapper">
       <ExpensesTable />
-
-      <ExpenseFormModal />
+      <!-- Форма для десктопа (выше 1024px) -->
+      <div class="desktop-form">
+        <ExpenseFormModal />
+      </div>
     </div>
   </div>
 </template>
@@ -20,18 +32,150 @@ import ExpenseFormModal from './ExpenseFormModal.vue'
   margin: 0 auto;
   padding: 30px;
   min-height: 100vh;
+  box-sizing: border-box;
+  background: var(--color-bg-primary);
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 30px;
 }
 
 h1 {
   font-size: 32px;
-  color: #000000;
-  margin-bottom: 30px;
+  color: var(--color-text-primary);
+  margin-bottom: 0;
   font-weight: 700;
 }
 
 .content-wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 379px;
   gap: 30px;
-  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobile-new-expense-btn-container {
+  display: none;
+}
+
+.mobile-new-expense-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mobile-new-expense-text {
+  font-size: 16px;
+  color: var(--color-text-primary);
+  transition: color 0.2s;
+}
+
+.add-icon {
+  width: 20px;
+  height: 20px;
+  transition: filter 0.2s;
+  order: 1;
+  filter: brightness(var(--icon-brightness));
+}
+
+.mobile-new-expense-link:hover .mobile-new-expense-text {
+  color: var(--color-primary);
+}
+
+.mobile-new-expense-link:hover .add-icon {
+  filter: brightness(1.2);
+}
+
+.desktop-form {
+  display: block;
+}
+
+/* Медиа-запросы */
+@media (max-width: 1024px) {
+  .container {
+    padding: 24px;
+  }
+
+  .header-section {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .desktop-form {
+    display: none;
+  }
+
+  .mobile-new-expense-btn-container {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 425px) {
+  .container {
+    padding: 0;
+    background: var(--color-bg-primary);
+  }
+
+  .header-section {
+    margin-bottom: 0;
+    background: var(--card-bg);
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 0;
+    background: var(--color-bg-primary);
+  }
+
+  .mobile-new-expense-text {
+    font-size: 14px;
+  }
+
+  .add-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 375px) {
+  .header-section {
+    padding: 14px 14px 10px 14px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .mobile-new-expense-text {
+    font-size: 13px;
+  }
 }
 </style>

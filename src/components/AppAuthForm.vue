@@ -156,155 +156,158 @@ const isDisabled = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: #f0f0f0;
+  min-height: 100vh;
+  background: var(--color-bg-secondary);
   padding: 20px;
 }
 
 form {
-  width: 380px;
-  border: 1px solid #e0e0e0;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  background: white;
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px var(--color-shadow);
   box-sizing: border-box;
 }
 
 form h2 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   font-size: 24px;
-  color: #333333;
+  color: var(--color-text-primary);
 }
 
-input,
-button {
+input {
   width: 100%;
-  padding: 12px 10px;
-  margin-bottom: 18px;
-  border: 1px solid #ddd;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  font-size: 16px;
+  transition: all 0.2s ease;
   box-sizing: border-box;
+  background: var(--input-bg);
+  color: var(--color-text-primary);
 }
 
-input.invalid {
-  border-color: #dc2626;
-  background: #fef2f2;
-}
-
-button:disabled {
-  background: #999;
-  cursor: not-allowed;
-  opacity: 0.8;
+input::placeholder {
+  color: var(--color-text-tertiary);
 }
 
 input:focus {
-  outline: 2px solid #6a11cb;
-  border-color: transparent;
+  outline: none;
+  border-color: var(--color-primary);
+  background: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-hover);
 }
 
-input.filled {
-  background-color: #f3ebff;
-}
-
-button {
-  background-color: #6a11cb;
+button[type='submit'] {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
   border: none;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
 }
 
-button:hover {
-  background-color: #4a008f;
-}
-
-button[type='button'] {
-  background-color: #6c757d;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-}
-
-button[type='button']:hover {
-  background-color: #495057;
-}
-
-.error {
-  color: red;
-  margin: 10px 0;
-  text-align: center;
-}
-
-.logo img {
-  width: 100px;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-p {
-  margin: 10px 0;
-}
-
-.toggle-btn {
-  display: inline-block;
-  background: none;
-  border: none;
-  color: #6a11cb;
-  padding: 0;
-  margin-left: 5px;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.toggle-btn:hover {
-  text-decoration: underline;
-  color: #4a008f;
-}
-
-.toggle-text {
-  color: #666666;
-  font-size: 14px;
-  margin: 15px 0 0;
-}
-
-.form-footer {
-  text-align: center;
-  margin-top: 20px;
+button[type='submit']:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .modal__form-group {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
 }
 
-.modal__form-group p,
-.modal__form-group a {
-  color: rgba(148, 166, 190, 0.4);
+.modal__form-group p {
+  color: var(--color-text-tertiary);
   font-size: 14px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.14px;
-}
-
-.modal__form-group a {
-  text-decoration: underline;
+  margin-bottom: 8px;
 }
 
 .modal__link {
-  color: #6a11cb;
+  color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.3s;
+  font-weight: 600;
+  font-size: 14px;
 }
 
-.modal__link:hover {
-  text-decoration: underline;
-  color: #4a008f;
+.error {
+  color: var(--color-danger);
+  font-size: 14px;
+  text-align: center;
+  margin: 10px 0;
+  padding: 10px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--color-danger);
+}
+
+/* Медиа-запросы */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  form {
+    padding: 24px 20px;
+    border-radius: 10px;
+  }
+
+  form h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  input {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  button[type='submit'] {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 425px) {
+  .login-container {
+    padding: 14px !important;
+  }
+
+  form {
+    padding: 20px 16px !important;
+    max-width: 100% !important;
+  }
+
+  form h2 {
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+  }
+
+  input {
+    font-size: 14px !important;
+    padding: 12px !important;
+    margin-bottom: 14px !important;
+  }
+
+  button[type='submit'] {
+    font-size: 14px !important;
+    padding: 14px !important;
+  }
+
+  .modal__form-group p,
+  .modal__form-group a {
+    font-size: 12px !important;
+  }
 }
 </style>
